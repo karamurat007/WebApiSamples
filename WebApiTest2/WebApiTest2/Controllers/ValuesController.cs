@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApiTest2.Controllers
@@ -12,6 +13,7 @@ namespace WebApiTest2.Controllers
     {
         // GET api/values
         [HttpGet]
+        //[Authorize(Roles = "Editor")] //--> 25. Derse göre bu metodun çalışıyor olması gerekiyor fakat hata vermekte. Bu kısım kapatıldığında sorun gözlemlenmemekte.
         public ActionResult<IEnumerable<string>> Get()
         {
             return new string[] { "value1", "value2" };

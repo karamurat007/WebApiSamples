@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using WebApiTest2.CustomMiddlewares;
 using WebApiTest2.DataAccess;
 using WebApiTest2.Formatters;
 
@@ -41,7 +42,7 @@ namespace WebApiTest2
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseMiddleware<AuthenticationMiddleware>();
             app.UseMvc();
         }
     }
