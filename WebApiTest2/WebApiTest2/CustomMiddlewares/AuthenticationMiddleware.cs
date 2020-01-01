@@ -23,9 +23,51 @@ namespace WebApiTest2.CustomMiddlewares
         //    await _next(context);
         //}
         //23. Ders için yapılan geliştirme
+        //public async Task Invoke(HttpContext context)
+        //{
+        //    var authHeader = context.Request.Headers["Authorization"];
+        //    if (string.IsNullOrEmpty(authHeader.ToString()) == false && authHeader.ToString().StartsWith("basic", StringComparison.OrdinalIgnoreCase))
+        //    {
+        //        var token = authHeader.ToString().Substring(6).Trim();
+        //        var credentialString = string.Empty;
+        //        try
+        //        {
+        //            credentialString = Encoding.UTF8.GetString(Convert.FromBase64String(token));
+        //        }
+        //        catch
+        //        {
+        //            context.Response.StatusCode = 500;
+        //        }
+        //        var credentials = credentialString.Split(':');
+        //        if(credentials[0]=="abm" && credentials[1] == "123456")
+        //        {
+        //            var claims = new[]
+        //            {
+        //                new Claim("name", credentials[0]),
+        //                new Claim(ClaimTypes.Role, "Admin")
+        //            };
+        //            var identity = new ClaimsIdentity(claims, "Basic");
+        //            context.User = new ClaimsPrincipal(identity);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        context.Response.StatusCode = 401;
+        //    }
+        //    await _next(context);
+        //}
+
+        //26. Ders için yapılan gelişitrme(Hocanın mantığına sadık kalınarak kod güncellemesi dersten farklı olarak yapıldı.)
         public async Task Invoke(HttpContext context)
         {
             var authHeader = context.Request.Headers["Authorization"];
+            
+            if (string.IsNullOrEmpty(authHeader.ToString()))
+            {
+                await _next(context);
+                return;
+            }
+
             if (string.IsNullOrEmpty(authHeader.ToString()) == false && authHeader.ToString().StartsWith("basic", StringComparison.OrdinalIgnoreCase))
             {
                 var token = authHeader.ToString().Substring(6).Trim();
@@ -39,7 +81,7 @@ namespace WebApiTest2.CustomMiddlewares
                     context.Response.StatusCode = 500;
                 }
                 var credentials = credentialString.Split(':');
-                if(credentials[0]=="abm" && credentials[1] == "123456")
+                if (credentials[0] == "abm" && credentials[1] == "123456")
                 {
                     var claims = new[]
                     {
@@ -48,13 +90,17 @@ namespace WebApiTest2.CustomMiddlewares
                     };
                     var identity = new ClaimsIdentity(claims, "Basic");
                     context.User = new ClaimsPrincipal(identity);
+                    await _next(context);
+                }
+                else
+                {
+                    context.Response.StatusCode = 401;
                 }
             }
             else
             {
                 context.Response.StatusCode = 401;
             }
-            await _next(context);
         }
     }
 }
