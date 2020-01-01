@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WebApiTest2.DataAccess;
+using WebApiTest2.Formatters;
 
 namespace WebApiTest2
 {
@@ -27,6 +28,10 @@ namespace WebApiTest2
         {
             services.AddScoped<IProductDal, EfProductDal>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(options => 
+            {
+                options.OutputFormatters.Add(new VCardOutputFormatter());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
