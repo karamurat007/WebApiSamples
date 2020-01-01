@@ -15,5 +15,6 @@ namespace WebApiTest2.DataAccess
         }
 
         public virtual DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }

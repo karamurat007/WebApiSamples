@@ -109,5 +109,21 @@ namespace WebApiTest2.Controllers
             }
             return BadRequest();
         }
+
+        //18. Ders içeriğinde yapılanlar
+        [HttpGet("GetProductsDetail")]
+        public IActionResult GetProductsWithDetails()
+        {
+            try
+            {
+                var result = _productDal.GetProductsWithDetails();
+                return Ok(result);
+            }
+            catch
+            {
+
+            }
+            return BadRequest();
+        }
     }
 }
